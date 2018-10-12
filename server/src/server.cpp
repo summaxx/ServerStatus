@@ -154,7 +154,7 @@ void CServer::Update()
 		else if(m_aClients[ClientID].m_State == CClient::STATE_AUTHED)
 		{
 			m_aClients[ClientID].m_LastReceived = time_get();
-			CClient *pClient = ClientNet(ClientNetID);
+			CClient *pClient = ClientNet(ClientID);
 			str_format(pClient.m_Stats.m_ip,32,"%s", m_Network.ClientAddr(ClientID));
 			if(Main()->Config()->m_Verbose)
 				dbg_msg("server", "ncid=%d cmd='%s'", ClientID, aBuf);
