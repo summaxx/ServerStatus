@@ -80,7 +80,7 @@ public:
 
 	void OnNewClient(int ClienNettID, int ClientID);
 	void OnDelClient(int ClientNetID);
-	int HandleMessage(int ClientNetID, char *pMessage);
+	int HandleMessage(int ClientNetID, char *pMessage, NETADDR ip);
 	int ReadConfig();
 	int Run();
 
