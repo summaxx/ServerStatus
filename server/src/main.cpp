@@ -106,13 +106,12 @@ void CMain::OnDelClient(int ClientNetID)
 	}
 }
 
-int CMain::HandleMessage(int ClientNetID, char *pMessage, NETADDR ip)
+int CMain::HandleMessage(int ClientNetID, char *pMessage)
 {
 	CClient *pClient = ClientNet(ClientNetID);
 	if(!pClient)
 		return true;
 
-	str_format(pClient->m_Stats.m_ip,32,"%s", ip);
 	if(str_comp_num(pMessage, "update", sizeof("update")-1) == 0)
 	{
 		char *pData = str_skip_whitespaces(&pMessage[sizeof("update")-1]);
@@ -255,7 +254,7 @@ void CMain::JSONUpdateThread(void *pUser)
 				 "{ \"name\": \"%s\",\"type\": \"%s\",\"host\": \"%s\",\"location\": \"%s\",\"online4\": %s, \"online6\": %s,\"ip_status\": %s,\"uptime\": \"%s\",\"load_1\": %.2f, \"load_5\": %.2f, \"load_15\": %.2f,\"network_rx\": %" PRId64 ", \"network_tx\": %" PRId64 ", \"network_in\": %" PRId64 ", \"network_out\": %" PRId64 ", \"cpu\": %d, \"memory_total\": %" PRId64 ", \"memory_used\": %" PRId64 ", \"swap_total\": %" PRId64 ", \"swap_used\": %" PRId64 ", \"hdd_total\": %" PRId64 ", \"hdd_used\": %" PRId64 ", \"custom\": \"%s\" },\n",
 					pClients[i].m_aName,pClients[i].m_aType,pClients[i].m_aHost,pClients[i].m_aLocation,
 					pClients[i].m_Stats.m_Online4 ? "true" : "false",pClients[i].m_Stats.m_Online6 ? "true" : "false",pClients[i].m_Stats.m_IpStatus ? "true": "false",
-					aUptime, pClients[i].m_Stats.m_Load_1, pClients[i].m_Stats.m_Load_5, pClients[i].m_Stats.m_Load_15, pClients[i].m_Stats.m_NetworkRx, pClients[i].m_Stats.m_NetworkTx, pClients[i].m_Stats.m_NetworkIN, pClients[i].m_Stats.m_NetworkOUT, (int)pClients[i].m_Stats.m_CPU, pClients[i].m_Stats.m_MemTotal, pClients[i].m_Stats.m_MemUsed, pClients[i].m_Stats.m_SwapTotal, pClients[i].m_Stats.m_SwapUsed, pClients[i].m_Stats.m_HDDTotal, pClients[i].m_Stats.m_HDDUsed, pClients[i].m_Stats.m_aCustom);
+						   aUptime, pClients[i].m_Stats.m_Load_1, pClients[i].m_Stats.m_Load_5, pClients[i].m_Stats.m_Load_15, pClients[i].m_Stats.m_NetworkRx, pClients[i].m_Stats.m_NetworkTx, pClients[i].m_Stats.m_NetworkIN, pClients[i].m_Stats.m_NetworkOUT, (int)pClients[i].m_Stats.m_CPU, pClients[i].m_Stats.m_MemTotal, pClients[i].m_Stats.m_MemUsed, pClients[i].m_Stats.m_SwapTotal, pClients[i].m_Stats.m_SwapUsed, pClients[i].m_Stats.m_HDDTotal, pClients[i].m_Stats.m_HDDUsed, pClients[i].m_Stats.m_ip); 
 				pBuf += strlen(pBuf);
 			}
 			else

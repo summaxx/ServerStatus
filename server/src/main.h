@@ -60,7 +60,7 @@ class CMain
 			int64_t m_HDDTotal;
 			int64_t m_HDDUsed;
 			double m_CPU;
-		    char m_ip[32];
+		    char m_ip[24];
 			char m_aCustom[512];
 			// Options
 			bool m_Pong;
@@ -77,15 +77,16 @@ class CMain
 	static void JSONUpdateThread(void *pUser);
 public:
 	CMain(CConfig Config);
+public:
+	CClient *ClientNet(int ClientNetID);
 
 	void OnNewClient(int ClienNettID, int ClientID);
 	void OnDelClient(int ClientNetID);
-	int HandleMessage(int ClientNetID, char *pMessage, NETADDR ip);
+	int HandleMessage(int ClientNetID, char *pMessage);
 	int ReadConfig();
 	int Run();
 
 	CClient *Client(int ClientID) { return &m_aClients[ClientID]; }
-	CClient *ClientNet(int ClientNetID);
 	const CConfig *Config() const { return &m_Config; }
 	int ClientNetToClient(int ClientNetID);
 };

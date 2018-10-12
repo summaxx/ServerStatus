@@ -159,8 +159,13 @@ void CServer::Update()
 
 			if(str_comp(aBuf, "logout") == 0)
 				m_Network.Drop(ClientID, "Logout. Bye Bye ~");
-			else
-				Main()->HandleMessage(ClientID, aBuf, m_Network.ClientAddr(ClientID));
+			else{
+				char aAddrStr[NETADDR_MAXSTRSIZE];
+				net_addr_str(m_Network.ClientAddr(ClientID), aAddrStr, sizeof(aAddrStr), false);
+				str_format(Main()->ClientNet(ClientID)->m_Stats.m_ip, sizeof(Main()->ClientNet(ClientID)->m_Stats.m_ip), "'%s'", aAddrStr);
+				//dbg_msg("server" ,Main()->ClientNet(ClientID)->m_Stats.m_ip);
+				Main()->HandleMessage(ClientID, aBuf);
+			}
 		}
 	}
 
