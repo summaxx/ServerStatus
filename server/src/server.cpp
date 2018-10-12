@@ -154,15 +154,13 @@ void CServer::Update()
 		else if(m_aClients[ClientID].m_State == CClient::STATE_AUTHED)
 		{
 			m_aClients[ClientID].m_LastReceived = time_get();
-			CClient *pClient = ClientNet(ClientID);
-			str_format(pClient.m_Stats.m_ip,32,"%s", m_Network.ClientAddr(ClientID));
 			if(Main()->Config()->m_Verbose)
 				dbg_msg("server", "ncid=%d cmd='%s'", ClientID, aBuf);
 
 			if(str_comp(aBuf, "logout") == 0)
 				m_Network.Drop(ClientID, "Logout. Bye Bye ~");
 			else
-				Main()->HandleMessage(ClientID, aBuf);
+				Main()->HandleMessage(ClientID, aBuf, m_Network.ClientAddr(ClientID));
 		}
 	}
 

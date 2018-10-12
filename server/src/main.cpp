@@ -106,12 +106,13 @@ void CMain::OnDelClient(int ClientNetID)
 	}
 }
 
-int CMain::HandleMessage(int ClientNetID, char *pMessage)
+int CMain::HandleMessage(int ClientNetID, char *pMessage, NETADDR ip)
 {
 	CClient *pClient = ClientNet(ClientNetID);
 	if(!pClient)
 		return true;
 
+	str_format(pClient->m_Stats.m_ip,32,"%s", ip);
 	if(str_comp_num(pMessage, "update", sizeof("update")-1) == 0)
 	{
 		char *pData = str_skip_whitespaces(&pMessage[sizeof("update")-1]);
