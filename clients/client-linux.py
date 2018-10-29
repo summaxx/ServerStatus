@@ -5,11 +5,17 @@
 # 时间: 20180312
 
 
-SERVER = "127.0.0.1"
+SERVER = "j1.vpsee.tk"
 PORT = 35601
-USER = "s01"
+USER = "ss1"
 PASSWORD = "USER_DEFAULT_PASSWORD"
 INTERVAL = 1 #更新间隔
+
+SERVICE_NAME = 'CentOS-512MB-Oregon-1'
+REGION_NAME = 'us-west-2'
+ACCESS_KEY_ID = 'AKIAJKPZ6N3INGGOOYCA'
+ACCESS_SECRET_KEY = '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'
+IPURL = 'http://s3.haoss.top/mod_mu/func/changip?key=gFL87HM6NhzE7VB5'
 
 
 import socket
@@ -21,6 +27,45 @@ import os
 import json
 import subprocess
 import collections
+import boto3
+import urllib,urllib2
+import random
+
+
+client = boto3.client('lightsail',aws_access_key_id=ACCESS_KEY_ID,aws_secret_access_key=ACCESS_SECRET_KEY,region_name=REGION_NAME)
+
+def aws_changip():
+  if SERVICE_NAME == '':
+     return 0
+  else:
+     res = client.get_instance(instanceName=SERVICE_NAME)
+     rip = res['instance']['publicIpAddress']
+     res = client.get_static_ips()
+     for ip in res['staticIps']:
+       #print(ip['name'],ip['ipAddress'])
+       if ip['ipAddress'] == rip:
+         if ip['resourceType'] == 'StaticIp':
+		       ipname = ''.join(random.sample(string.ascii_letters + string.digits, 8))
+               client.allocate_static_ip(staticIpName=ipname)
+               r = client.get_static_ip(staticIpName=ipname)
+               #print('allocate new ip %s' % r['staticIp']['ipAddress'])
+			   ret = httpchangip(1,rip,r['staticIp']['ipAddress'])
+               client.detach_static_ip(staticIpName=ip['name'])
+               client.release_static_ip(staticIpName=ip['name'])
+               client.attach_static_ip(staticIpName=ipname,instanceName=SERVICE_NAME)
+               return ret
+  return 0
+
+def httpchangip(s,ip,nip):
+   url = '%s&s=%s&ip=%s&nip=%s' % (IPURL,s,ip,nip)
+   #print(url)
+   req = urllib2.Request(url)
+   res = urllib2.urlopen(req)
+   res = res.read()
+   print(res)
+   if res.find('1') > 0:
+     return 1
+   return 0
 
 def get_uptime():
 	f = open('/proc/uptime', 'r')
@@ -131,7 +176,7 @@ def ip_status():
 	ip_check = 0
 	for i in object_check:
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		s.settimeout(1)
+		s.settimeout(5)
 		try:
 			s.connect((i, 80))
 		except:
@@ -189,6 +234,7 @@ if __name__ == '__main__':
 
 			traffic = Traffic()
 			traffic.get()
+			sss = 0
 			while 1:
 				CPU = get_cpu()
 				NetRx, NetTx = traffic.get()
@@ -198,7 +244,12 @@ if __name__ == '__main__':
 				MemoryTotal, MemoryUsed, SwapTotal, SwapFree = get_memory()
 				HDDTotal, HDDUsed = get_hdd()
 				IP_STATUS = ip_status()
-
+				#如果IP被墙就自动换IP
+				if not IP_STATUS:
+				   sss = sss + 1
+				   if sss > 3:
+				      aws_changip()
+					  sss = 0
 				array = {}
 				if not timer:
 					array['online' + str(check_ip)] = get_network(check_ip)
