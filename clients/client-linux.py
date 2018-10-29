@@ -5,11 +5,12 @@
 # 时间: 20180312
 
 
-SERVER = "j1.vpsee.tk"
+SERVER = "127.0.0.1"
 PORT = 35601
-USER = "ss1"
+USER = "s01"
 PASSWORD = "USER_DEFAULT_PASSWORD"
 INTERVAL = 1 #更新间隔
+
 
 import socket
 import time
@@ -130,7 +131,7 @@ def ip_status():
 	ip_check = 0
 	for i in object_check:
 		s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		s.settimeout(5)
+		s.settimeout(1)
 		try:
 			s.connect((i, 80))
 		except:
