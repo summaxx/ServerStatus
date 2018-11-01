@@ -11,7 +11,7 @@ USER = "s01"
 PASSWORD = "USER_DEFAULT_PASSWORD"
 INTERVAL = 1 #更新间隔
 AWS_ON = 0
-
+AWS_PORT = 1024
 
 import socket
 import time
@@ -27,11 +27,11 @@ def gfw_Notice():
 	g = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	g.settimeout(10)
 	try:
-		g.connect((SERVER, 1024))
-		g.sendall(b''+AWS_ON)
+		g.connect((SERVER, AWS_PORT))
+		g.sendall(b''+str(AWS_ON))
 		g.recv(1)
 	except:
-		pass
+		print "Notice fail"
 
 def get_uptime():
 	f = open('/proc/uptime', 'r')
