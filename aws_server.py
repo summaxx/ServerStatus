@@ -8,8 +8,8 @@ import random
 import string
 import threading
 
-ACCESS_KEY_ID = 'AKIAJSNPBEMBIQW4CZ4A'
-ACCESS_SECRET_KEY = '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'
+ACCESS_KEY_ID = 'ID'
+ACCESS_SECRET_KEY = 'KEY'
 #IPURL = 'http://s3.haoss.top/mod_mu/func/changip?key=gFL87HM6NhzE7VB5'
 IPURL = 'http://s3.freefly.top/mod_mu/func/changip?key=UQCpT79RXuXzmoRi'
 regions = {'1': 'ap-northeast-1', '2': 'ap-southeast-1', '3': 'us-west-2'}
