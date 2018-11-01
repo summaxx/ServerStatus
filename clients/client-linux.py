@@ -10,6 +10,7 @@ PORT = 35601
 USER = "s01"
 PASSWORD = "USER_DEFAULT_PASSWORD"
 INTERVAL = 1 #更新间隔
+AWS_ON = 0
 
 
 import socket
@@ -21,6 +22,16 @@ import os
 import json
 import subprocess
 import collections
+
+def gfw_Notice():
+	g = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	g.settimeout(10)
+	try:
+		g.connect((SERVER, 1024))
+		g.sendall(b''+AWS_ON)
+		g.recv(1)
+	except:
+		pass
 
 def get_uptime():
 	f = open('/proc/uptime', 'r')
@@ -189,6 +200,7 @@ if __name__ == '__main__':
 
 			traffic = Traffic()
 			traffic.get()
+			gfw_count = 0
 			while 1:
 				CPU = get_cpu()
 				NetRx, NetTx = traffic.get()
@@ -198,7 +210,11 @@ if __name__ == '__main__':
 				MemoryTotal, MemoryUsed, SwapTotal, SwapFree = get_memory()
 				HDDTotal, HDDUsed = get_hdd()
 				IP_STATUS = ip_status()
-
+				if not IP_STATUS and AWS_ON > 0:
+					gfw_count += 1
+					if gfw_count > 3:
+						gfw_count = 0
+						gfw_Notice()
 				array = {}
 				if not timer:
 					array['online' + str(check_ip)] = get_network(check_ip)
