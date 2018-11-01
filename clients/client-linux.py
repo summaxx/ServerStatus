@@ -212,9 +212,11 @@ if __name__ == '__main__':
 				IP_STATUS = ip_status()
 				if not IP_STATUS and AWS_ON > 0:
 					gfw_count += 1
-					if gfw_count > 3:
+					if gfw_count > 10:
 						gfw_count = 0
 						gfw_Notice()
+				else:
+					gfw_count = 0
 				array = {}
 				if not timer:
 					array['online' + str(check_ip)] = get_network(check_ip)
