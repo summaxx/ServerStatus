@@ -10,7 +10,8 @@ PORT = 35601
 USER = "s01"
 PASSWORD = "USER_DEFAULT_PASSWORD"
 INTERVAL = 1 #更新间隔
-AWS_ON = 0
+AWS_ON = 0 # aws 区域代码 {'1': 'ap-northeast-1', '2': 'ap-southeast-1', '3': 'us-west-2'}
+HTTP_ON = 0 #是否sspanel api换ip
 AWS_PORT = 1024
 
 import socket
@@ -28,7 +29,7 @@ def gfw_Notice():
 	g.settimeout(10)
 	try:
 		g.connect((SERVER, AWS_PORT))
-		g.sendall(b''+str(AWS_ON))
+		g.sendall(b''+str(AWS_ON)+str(HTTP_ON))
 		g.recv(1)
 	except:
 		print "Notice fail"
