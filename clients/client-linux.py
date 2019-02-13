@@ -10,10 +10,10 @@ PORT = 35601
 USER = "s01"
 PASSWORD = "USER_DEFAULT_PASSWORD"
 INTERVAL = 1 #更新间隔
-AWS_ON = 0 # aws 区域代码 {'1': 'ap-northeast-1', '2': 'ap-southeast-1', '3': 'us-west-2'}
-HTTP_ON = 0 #是否sspanel api换ip
-DDNS_ON = 0 #是否启用ddns 功能
-DDNS_HOST = '' #动态域名名称
+AWS_ON = 0   #请填写字符 aws 区域代码 {'1': 'ap-northeast-1', '2': 'ap-southeast-1', '3': 'us-west-2'},
+HTTP_ON = 0  #是否sspanel api换ip
+DDNS_ON = 0  #是否启用ddns 功能
+DDNS_HOST = ''   #动态域名名称
 DDNS_DOMAIN = '' #动态域名
 DDNS_PASSWD = '' #动态域名密码
 AWS_PORT = 1024
@@ -220,7 +220,7 @@ if __name__ == '__main__':
 				IP_STATUS = ip_status()
 				if not IP_STATUS and AWS_ON > 0:
 					gfw_count += 1
-					if gfw_count > 10:
+					if gfw_count > 5:
 						gfw_count = 0
 						gfw_Notice()
 				else:
