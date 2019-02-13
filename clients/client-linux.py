@@ -12,7 +12,10 @@ PASSWORD = "USER_DEFAULT_PASSWORD"
 INTERVAL = 1 #更新间隔
 AWS_ON = 0 # aws 区域代码 {'1': 'ap-northeast-1', '2': 'ap-southeast-1', '3': 'us-west-2'}
 HTTP_ON = 0 #是否sspanel api换ip
-NF_ON = 0 #是否自动添加netflix 客户ip
+DDNS_ON = 0 #是否启用ddns 功能
+DDNS_HOST = '' #动态域名名称
+DDNS_DOMAIN = '' #动态域名
+DDNS_PASSWD = '' #动态域名密码
 AWS_PORT = 1024
 
 import socket
@@ -30,10 +33,13 @@ def gfw_Notice():
 	g.settimeout(10)
 	try:
 		g.connect((SERVER, AWS_PORT))
-		g.sendall(b''+str(AWS_ON)+str(HTTP_ON))+str(NF_ON)
+		d = {'regions': AWS_ON, 'http_on': HTTP_ON, 'ddns_on': DDNS_ON, 'host': DDNS_HOST, 'domain': DDNS_DOMAIN, 'passwd': DDNS_PASSWD}
+		js = json.dumps(d)
+		g.sendall(js)
 		g.recv(1)
 	except:
 		print "Notice fail"
+	g.close()
 
 def get_uptime():
 	f = open('/proc/uptime', 'r')
